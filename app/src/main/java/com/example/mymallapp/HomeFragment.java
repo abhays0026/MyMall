@@ -1,8 +1,10 @@
 package com.example.mymallapp;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,10 +15,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,6 +46,22 @@ public class HomeFragment extends Fragment {
     final private long PERIOD_TIME = 3000;
 
     /////// Banner Slider
+
+
+    //////// Strip Ad
+
+    private ImageView stripAdImage;
+    private ConstraintLayout stripAdContainer;
+
+    //////// Strip Ad
+
+    //////// Horizontal Product Layout
+
+    private TextView horizontalLayoutTitle;
+    private Button horizontalLayoutViewAllBtn;
+    private RecyclerView horizontalRecyclerView;
+
+    ////////Horizontal Product Layout
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,26 +95,28 @@ public class HomeFragment extends Fragment {
 
         sliderModelList = new ArrayList<SliderModel>();
 
-        sliderModelList.add(new SliderModel(R.mipmap.home));
-        sliderModelList.add(new SliderModel(R.mipmap.bell));
+        sliderModelList.add(new SliderModel(R.mipmap.bell,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.banner,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.green_email,"#077AE4"));
 
-        sliderModelList.add(new SliderModel(R.mipmap.green_email));
-        sliderModelList.add(new SliderModel(R.mipmap.red_email));
-        sliderModelList.add(new SliderModel(R.mipmap.app_icon));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher));
-        sliderModelList.add(new SliderModel(R.mipmap.cart_black));
-        sliderModelList.add(new SliderModel(R.mipmap.profile_placeholder));
-        sliderModelList.add(new SliderModel(R.mipmap.home));
-        sliderModelList.add(new SliderModel(R.mipmap.bell));
-        sliderModelList.add(new SliderModel(R.mipmap.banner));
+        sliderModelList.add(new SliderModel(R.mipmap.red_email,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.app_icon,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.cart_black,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.profile_placeholder,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.home,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.bell,"#077AE4"));
 
-        sliderModelList.add(new SliderModel(R.mipmap.green_email));
-        sliderModelList.add(new SliderModel(R.mipmap.red_email));
+        sliderModelList.add(new SliderModel(R.mipmap.banner,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.green_email,"#077AE4"));
+        sliderModelList.add(new SliderModel(R.mipmap.red_email,"#077AE4"));
 
         SliderAdapter sliderAdapter = new SliderAdapter(sliderModelList);
         bannerSliderViewPager.setAdapter(sliderAdapter);
         bannerSliderViewPager.setClipToPadding(false);
         bannerSliderViewPager.setPageMargin(20);
+
+        bannerSliderViewPager.setCurrentItem(currentPage);
 
         ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
@@ -133,6 +154,42 @@ public class HomeFragment extends Fragment {
         });
 
         /////Banner slider
+
+        //////// Strip Ad
+
+         stripAdImage = view.findViewById(R.id.strip_ad_image);
+         stripAdContainer = view.findViewById(R.id.strip_ad_container);
+
+         stripAdImage.setImageResource(R.drawable.stripadd);
+         stripAdContainer.setBackgroundColor(Color.parseColor("#000000"));
+
+        //////// Strip Ad
+
+        //////// Horizontal Product Layout
+
+        horizontalLayoutTitle = view.findViewById(R.id.horizontal_scroll_layout_title);
+        horizontalLayoutViewAllBtn = view.findViewById(R.id.horizontal_scroll_view_all_btn);
+        horizontalRecyclerView = view.findViewById(R.id.horizontal_scroll_layout_recycler_view);
+
+        List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.image2,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.app_icon,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.cart_black,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.banner,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.ic_launcher,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.my_account,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.green_email,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.home,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
+
+
+        HorizontalProductScrollAdapter horizontalProductScrollAdapter = new HorizontalProductScrollAdapter(horizontalProductScrollModelList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        horizontalRecyclerView.setLayoutManager(linearLayoutManager);
+
+        horizontalRecyclerView.setAdapter((horizontalProductScrollAdapter));
+        horizontalProductScrollAdapter.notifyDataSetChanged();
+        //////// Horizontal Product Layout
 
         return view;
     }
