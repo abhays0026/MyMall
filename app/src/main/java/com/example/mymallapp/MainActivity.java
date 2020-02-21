@@ -10,6 +10,8 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -23,10 +25,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    private FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView.getMenu().getItem(0).setChecked(true);
 
-
+        frameLayout = findViewById(R.id.main_frame_layout);
+        setFragment(new HomeFragment());
 
     }
 
@@ -113,4 +119,11 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    private void setFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(frameLayout.getId(),fragment);
+        fragmentTransaction.commit();
+    }
+
 }
