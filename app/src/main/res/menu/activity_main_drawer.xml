@@ -28,12 +28,15 @@
             android:id="@+id/nav_my_account"
             android:icon="@mipmap/my_account"
             android:title="My account" />
+
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@mipmap/sign_out"
+            android:title="Sign Out" />
+
     </group>
 
-    <item
-        android:id="@+id/nav_sign_out"
-        android:icon="@mipmap/sign_out"
-        android:title="Sign Out" />
+
 
 
 </menu>
