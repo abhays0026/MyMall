@@ -9,6 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import org.w3c.dom.Text;
 
 import java.util.List;
@@ -24,7 +27,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return horizontalProductScrollModelList.size();
     }
 
     @Override
@@ -40,9 +43,9 @@ public class GridProductLayoutAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
 
-        View view ;
-        if(convertView == null){
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.horizontal_scroll_item_layout,null);
+        View view;
+        if (convertView == null) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.horizontal_scroll_item_layout, null);
             view.setElevation(0);
             view.setBackgroundColor(Color.parseColor("#ffffff"));
 
@@ -59,12 +62,13 @@ public class GridProductLayoutAdapter extends BaseAdapter {
             TextView productDescription = view.findViewById(R.id.h_s_product_description);
             TextView productPrice = view.findViewById(R.id.h_s_product_price);
 
-            productImage.setImageResource(horizontalProductScrollModelList.get(position).getProductImage());
+            Glide.with(parent.getContext()).load(horizontalProductScrollModelList.get(position).getProductImage())
+                    .apply(new RequestOptions().placeholder(R.mipmap.home)).into(productImage);
             productTitle.setText(horizontalProductScrollModelList.get(position).getProductTitle());
             productDescription.setText(horizontalProductScrollModelList.get(position).getProductDescription());
-            productPrice.setText(horizontalProductScrollModelList.get(position).getProductPrice());
+            productPrice.setText("Rs." + horizontalProductScrollModelList.get(position).getProductPrice() + "/-");
 
-        }else{
+        } else {
             view = convertView;
         }
 

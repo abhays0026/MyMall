@@ -1,29 +1,28 @@
 package com.example.mymallapp;
 
 
-import android.graphics.Color;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import static com.example.mymallapp.DBqueries.categoryModelList;
+import static com.example.mymallapp.DBqueries.lists;
+import static com.example.mymallapp.DBqueries.loadCategories;
+import static com.example.mymallapp.DBqueries.loadFragmentData;
+import static com.example.mymallapp.DBqueries.loadedCategoriesNames;
 
 
 /**
@@ -37,7 +36,9 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
-    private RecyclerView testing;
+    private RecyclerView homePageRecyclerView;
+    private HomePageAdapter adapter;
+    private ImageView noInternetConnection;
 
 
     @Override
@@ -45,86 +46,57 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        noInternetConnection = view.findViewById(R.id.no_internet_connection);
 
-        categoryRecyclerView = view.findViewById(R.id.category_recyclerview);
-       LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-       layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        categoryRecyclerView.setLayoutManager(layoutManager);
+        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        final List<CategoryModel> categoryModelList = new ArrayList<CategoryModel>();
-        categoryModelList.add(new CategoryModel("link","Home"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Furniture"));
-        categoryModelList.add(new CategoryModel("link","Fashion"));
-        categoryModelList.add(new CategoryModel("link","Toys"));
-        categoryModelList.add(new CategoryModel("link","Sports"));
-        categoryModelList.add(new CategoryModel("link","Wall Arts"));
-        categoryModelList.add(new CategoryModel("link","Books"));
-        categoryModelList.add(new CategoryModel("link","Shoes"));
+        if(networkInfo != null && networkInfo.isConnected() == true) {
 
-        categoryAdapter = new CategoryAdapter(categoryModelList);
-        categoryRecyclerView.setAdapter(categoryAdapter);
-        categoryAdapter.notifyDataSetChanged();
+            noInternetConnection.setVisibility(View.GONE);
 
-        /////Banner slider
-        List<SliderModel> sliderModelList = new ArrayList<SliderModel>();
+            categoryRecyclerView = view.findViewById(R.id.category_recyclerview);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+            categoryRecyclerView.setLayoutManager(layoutManager);
 
-        sliderModelList.add(new SliderModel(R.mipmap.bell,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.banner,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.green_email,"#077AE4"));
 
-        sliderModelList.add(new SliderModel(R.mipmap.red_email,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.app_icon,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.cart_black,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.profile_placeholder,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.home,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.bell,"#077AE4"));
+            categoryAdapter = new CategoryAdapter(categoryModelList);
+            categoryRecyclerView.setAdapter(categoryAdapter);
 
-        sliderModelList.add(new SliderModel(R.mipmap.banner,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.green_email,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.mipmap.red_email,"#077AE4"));
+            if (categoryModelList.size() == 0) {
+                loadCategories(categoryAdapter, getContext());
+            } else {
+                categoryAdapter.notifyDataSetChanged();
+            }
 
-        //////////Banner Slider
+            homePageRecyclerView = view.findViewById(R.id.home_page_recycler_view);
+            LinearLayoutManager testingLayoutManager = new LinearLayoutManager(getContext());
+            testingLayoutManager.setOrientation(RecyclerView.VERTICAL);
+            homePageRecyclerView.setLayoutManager(testingLayoutManager);
 
-        //////// Horizontal Product Layout
 
-        List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.image2,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.app_icon,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.cart_black,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.banner,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.ic_launcher,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.my_account,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.green_email,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.home,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.app_icon,"Redmi 5A","SD 625 Processor","Rs. 5999/-"));
 
-        //////// Horizontal Product Layout
 
-        /////////////////////////////
+            if (lists.size() == 0) {
+                loadedCategoriesNames.add("HOME");
+                lists.add(new ArrayList<HomePageModel>());
+                adapter = new HomePageAdapter(lists.get(0));
+                loadFragmentData(adapter, getContext(),0, "HOME");
+            } else {
+                adapter = new HomePageAdapter(lists.get(0));
+                adapter.notifyDataSetChanged();
+            }
 
-        testing = view.findViewById(R.id.home_page_recycler_view);
-        LinearLayoutManager testingLayoutManager = new LinearLayoutManager(getContext());
-        testingLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        testing.setLayoutManager(testingLayoutManager);
+            homePageRecyclerView.setAdapter(adapter);
 
-        List<HomePageModel> homePageModelList = new ArrayList<>();
-        homePageModelList.add(new HomePageModel(0, sliderModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.stripadd,"#000000"));
-        homePageModelList.add(new HomePageModel(2,"Deals of the Day !",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(3,"Deals of the Day !",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(1,R.mipmap.banner,"#ffff00"));
-        homePageModelList.add(new HomePageModel(3,"Deals of the Day !",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(2,"Deals of the Day !",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.stripadd,"#ff0000"));
-        homePageModelList.add(new HomePageModel(0, sliderModelList));
+        }else {
+            //Todo : add a no internet connection image in drawable file and replace it here at mipmaps place
+            Glide.with(this).load(R.mipmap.home).into(noInternetConnection);
+            noInternetConnection.setVisibility(View.VISIBLE);
+        }
 
-        HomePageAdapter adapter = new HomePageAdapter(homePageModelList);
-        testing.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
-        /////////////////////////////
 
         return view;
     }
