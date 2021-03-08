@@ -33,7 +33,8 @@ public class DBqueries {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                categoryModelList.add(new CategoryModel(documentSnapshot.get("icon").toString(), documentSnapshot.get("categoryName").toString()));
+                                categoryModelList.add(new CategoryModel(documentSnapshot.get("icon").toString(),
+                                        documentSnapshot.get("categoryName").toString()));
                             }
                             categoryAdapter.notifyDataSetChanged();
                         } else {
@@ -45,8 +46,8 @@ public class DBqueries {
 
     }
 
-    public static void loadFragmentData(final HomePageAdapter homePageAdapter, final Context context, final int index
-            , final String categoryName) {
+    public static void loadFragmentData(final HomePageAdapter homePageAdapter, final Context context,
+                                        final int index, final String categoryName) {
 
         firebaseFirestore.collection("CATEGORIES")
                 .document(categoryName.toUpperCase())
